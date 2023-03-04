@@ -51,10 +51,32 @@ data class HomeScreenUiState(
 
     val selectedDriverShipment: String?
         get() {
-            val ssScoreMap = mutableMapOf<Int, String>()
+            val ssScoreMap = mutableMapOf<Double, String>()
+            val vowelsList = listOf('a','e','i','o','u')
 
-            shipmentList.forEach {
-                
+            shipmentList.forEach { shipment ->
+                val words = shipment.split(" ")
+                val startIndex = words.indexOfFirst { it.matches(Regex("\\d+")) } + 1
+                val endIndex = words.indexOfFirst { it.matches(Regex("(Apt\\.|Suite\\.)")) }
+                val streetName = words.subList(
+                    startIndex,
+                    if (endIndex != -1) endIndex else words.size
+                ).joinToString(" ")
+
+                var baseScore = 0.00
+                var vowelsCount = 0.0
+                selectedDriver?.lowercase()?.forEach {
+                    if (vowelsList.contains(it)) vowelsCount++
+                }
+                if(streetName.length % 2 == 0) {
+                    baseScore = vowelsCount * 1.5
+                } else {
+                    baseScore = selectedDriver?.length?.toDouble()?.minus(vowelsCount) ?: 0.0
+                }
+
+                // todo: Check for common factors to increase SS by 50%
+
+                ssScoreMap.put(baseScore, shipment)
             }
 
             return dataBundle?.shipments?.firstOrNull()
