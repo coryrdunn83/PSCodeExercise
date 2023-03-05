@@ -31,7 +31,7 @@ class HomeScreenViewModel @Inject constructor(
         _uiState.update { currentState ->
             currentState.copy(
                 showDialog = !currentState.showDialog,
-                selectedDriver = driver
+                selectedDriver = currentState.driversWithShipmentsList.firstOrNull { it.driver == driver }
             )
         }
     }
@@ -39,38 +39,56 @@ class HomeScreenViewModel @Inject constructor(
 }
 
 data class HomeScreenUiState(
-    val dataBundle: DataBundle? = null,
+    private val dataBundle: DataBundle? = null,
     val showDialog: Boolean = false,
-    val selectedDriver: String? = null
+    val selectedDriver: DriverWithShipment? = null
 ) {
+    data class DriverWithShipment (
+        val driver: String = "",
+        val shipment: String = ""
+    )
+
     val driverList: List<String>
         get() = dataBundle?.drivers ?: emptyList()
 
-    val shipmentList: List<String>
+    private val shipmentList: List<String>
         get() = dataBundle?.shipments ?: emptyList()
 
-    val selectedDriverShipment: String
+    val driversWithShipmentsList: List<DriverWithShipment>
         get() {
-            val ssScoreMap = mutableMapOf<Double, String>()
-
+            val drivers = driverList.toMutableList()
+            val driversWithShipments = mutableListOf<DriverWithShipment>()
 
             shipmentList.forEach { shipment ->
-                val streetName = getStreetName(shipment)
-                val driverLength = selectedDriver?.length ?: 0
-                val streetLength = streetName.length
-                var baseScore = getBaseSuitabilityScore(streetLength, driverLength)
-
-                for (i in 2..minOf(streetLength, driverLength)) {
-                    if (streetLength % i == 0 && driverLength % i == 0) {
-                        baseScore *= 1.5
-                    }
-                }
-
-                ssScoreMap[baseScore] = shipment
+                val driver = getDriverForShipment(drivers, shipment)
+                driversWithShipments.add(DriverWithShipment(driver, shipment))
+                drivers.remove(driver)
             }
 
-            return ssScoreMap.maxBy { it.key }.value
+            return driversWithShipments
         }
+
+    private fun getDriverForShipment(drivers: MutableList<String>, shipment: String): String {
+        val sScoreMap = mutableMapOf<Double, String>()
+
+        drivers.forEach { driver ->
+            val streetName = getStreetName(shipment)
+            val driverLength = driver.length
+            val streetLength = streetName.length
+            var baseScore = getBaseSuitabilityScore(streetLength, driver)
+
+            for (i in 2..minOf(streetLength, driverLength)) {
+                if (streetLength % i == 0 && driverLength % i == 0) {
+                    baseScore *= 1.5
+                    break
+                }
+            }
+
+            sScoreMap[baseScore] = driver
+        }
+
+        return sScoreMap.maxBy { it.key }.value
+    }
 
     private fun getStreetName(shipment: String): String {
         val words = shipment.split(" ")
@@ -82,17 +100,18 @@ data class HomeScreenUiState(
         ).joinToString(" ")
     }
 
-    private fun getBaseSuitabilityScore(streetLength: Int, driverLength: Int): Double {
+    private fun getBaseSuitabilityScore(streetLength: Int, driver: String): Double {
         var vowelsCount = 0.0
         val vowelsList = listOf('a','e','i','o','u')
 
-        selectedDriver?.lowercase()?.forEach {
+        driver.lowercase().forEach {
             if (vowelsList.contains(it)) vowelsCount++
         }
+
         return if(streetLength % 2 == 0) {
             vowelsCount * 1.5
         } else {
-            driverLength.toDouble().minus(vowelsCount)
+            driver.length.minus(vowelsCount)
         }
     }
 }

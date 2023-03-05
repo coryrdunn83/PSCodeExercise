@@ -33,7 +33,7 @@ fun HomeScreen(
                 )
             },
             title = {
-                Text(text = uiState.selectedDriverShipment ?: "Shipment")
+                Text(text = uiState.selectedDriver?.shipment ?: "")
             },
             text = {
                 Text(text = "Would you like to accept this shipment?")
@@ -46,15 +46,13 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(16.dp),
         content = {
-            uiState.dataBundle?.drivers?.let {
-                items(it) { driver ->
+            if (uiState.driverList.isNotEmpty()) {
+                items(uiState.driverList) { driver ->
                     DriverCard(name = driver) {
-                        viewModel.toggleDialog()
+                        viewModel.toggleDialog(driver)
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                 }
-            } ?: item {
-                Text(text = "No drivers available")
             }
         }
     )
