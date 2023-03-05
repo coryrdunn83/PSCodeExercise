@@ -9,10 +9,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.coryrdunn.pscodeexercise.R
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -26,7 +28,7 @@ fun HomeScreen(
             onDismissRequest = { viewModel.toggleDialog() },
             confirmButton = {
                 Text(
-                    text = "Accept",
+                    text = stringResource(id = R.string.home_dialog_accept_btm_text),
                     modifier = Modifier.clickable {
                         viewModel.toggleDialog()
                     }
@@ -36,7 +38,7 @@ fun HomeScreen(
                 Text(text = uiState.selectedDriver?.shipment ?: "")
             },
             text = {
-                Text(text = "Would you like to accept this shipment?")
+                Text(text = stringResource(id = R.string.home_dialog_question_text))
             }
         )
     }

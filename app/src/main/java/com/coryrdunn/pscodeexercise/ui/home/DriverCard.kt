@@ -10,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.coryrdunn.pscodeexercise.R
 import com.coryrdunn.pscodeexercise.ui.theme.PSLightBlue
 import com.coryrdunn.pscodeexercise.ui.theme.PSTextBlue
 
@@ -33,7 +35,7 @@ fun DriverCard(
         ) {
             Icon(
                 imageVector = Icons.Filled.Person,
-                contentDescription = "Driver Image",
+                contentDescription = stringResource(id = R.string.home_driver_card_img_desc),
                 tint = PSLightBlue,
                 modifier = Modifier.size(48.dp)
             )

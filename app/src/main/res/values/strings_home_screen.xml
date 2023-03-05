@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_dialog_accept_btm_text">Accept</string>
+    <string name="home_dialog_question_text">
+        Would you like to accept this shipment?
+    </string>
+    <string name="home_driver_card_img_desc">Driver Image</string>
+</resources>
