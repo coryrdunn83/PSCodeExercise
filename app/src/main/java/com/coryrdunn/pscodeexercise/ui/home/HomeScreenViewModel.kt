@@ -6,6 +6,7 @@ import com.coryrdunn.pscodeexercise.domain.model.DriverWithShipment
 import com.coryrdunn.pscodeexercise.domain.use_case.GetDriversWithShipmentsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,11 +22,13 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun getDriversWithShipments() {
-        getDriversWithShipmentsUseCase().onEach { result ->
+        viewModelScope.launch {
+            getDriversWithShipmentsUseCase().collectLatest { result ->
                 _uiState.update { currentState ->
                     currentState.copy(driversWithShipmentsList = result)
                 }
-        }.launchIn(viewModelScope)
+            }
+        }
     }
 
     fun toggleDialog(driver: String? = null) {
