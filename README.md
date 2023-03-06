@@ -28,4 +28,4 @@ To run the PSCodeExercise app please follow the following steps:
 
 ## Package Structure
 
-![Package Structure Image](../../Downloads/PSCodeExercise.png)
+![Package Structure Image](app/src/main/assets/PSCodeExercise.png)
