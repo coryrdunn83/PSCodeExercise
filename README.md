@@ -25,3 +25,7 @@ To run the PSCodeExercise app please follow the following steps:
 4. Use the 'Run' button in Android Studio to install app on emulator or physical device
 
 ** This project requires your device be on Android SDK 26 or higher.
+
+## Package Structure
+
+![Package Structure Image](app/src/main/assets/PSCodeExercise.png)

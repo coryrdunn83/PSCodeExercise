@@ -1,4 +1,4 @@
-package com.coryrdunn.pscodeexercise.domain.model
+package com.coryrdunn.pscodeexercise.data.model
 
 data class DataBundle(
     val drivers: List<String> = listOf(),
