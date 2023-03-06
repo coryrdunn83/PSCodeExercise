@@ -48,10 +48,10 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(16.dp),
         content = {
-            if (uiState.driverList.isNotEmpty()) {
-                items(uiState.driverList) { driver ->
-                    DriverCard(name = driver) {
-                        viewModel.toggleDialog(driver)
+            if (uiState.driversWithShipmentsList.isNotEmpty()) {
+                items(uiState.driversWithShipmentsList) { driver ->
+                    DriverCard(name = driver.driver) {
+                        viewModel.toggleDialog(driver.driver)
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                 }

@@ -1,10 +1,8 @@
 package com.coryrdunn.pscodeexercise.domain.repository
 
-import com.coryrdunn.pscodeexercise.domain.model.DataBundle
-import kotlinx.coroutines.flow.StateFlow
+import com.coryrdunn.pscodeexercise.data.model.DataBundle
 
 interface DataRepository {
-    val dataFlow: StateFlow<DataBundle?>
 
-    suspend fun getData()
+    suspend fun getData(): DataBundle
 }
